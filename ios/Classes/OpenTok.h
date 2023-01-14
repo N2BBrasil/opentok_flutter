@@ -14,6 +14,7 @@ typedef NS_ENUM(NSUInteger, FLTConnectionState) {
   FLTConnectionStateWait = 2,
   FLTConnectionStateOnCall = 3,
   FLTConnectionStateError = 4,
+  FLTConnectionStateSubscriberDisconnect = 5,
 };
 
 @class FLTConnectionStateCallback;

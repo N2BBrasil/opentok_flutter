@@ -136,6 +136,7 @@ class OpentokFlutterPlugin : FlutterPlugin, OpenTok.OpenTokHostApi {
 
             session.subscribe(subscriber)
             opentokVideoPlatformView.subscriberContainer.addView(subscriber?.view)
+            notifyFlutter(OpenTok.ConnectionState.ON_CALL)
         }
 
         override fun onStreamDropped(session: Session, stream: Stream) {
@@ -169,7 +170,7 @@ class OpentokFlutterPlugin : FlutterPlugin, OpenTok.OpenTokHostApi {
             override fun onConnected(subscriberKit: SubscriberKit) {}
 
             override fun onDisconnected(subscriberKit: SubscriberKit) {
-                notifyFlutter(OpenTok.ConnectionState.LOGGED_OUT)
+                notifyFlutter(OpenTok.ConnectionState.SUBSCRIBER_DISCONNECT)
             }
 
             override fun onError(subscriberKit: SubscriberKit, opentokError: OpentokError) {

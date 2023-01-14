@@ -151,6 +151,13 @@ OpentokVideoFactory *factory;
   [self notifyStateChange:FLTConnectionStateError errorDescription:error.localizedDescription];
 }
 
+- (void)subscriber:(OTPublisherKit *)publisher streamDestroyed:(OTStream *)stream {
+  if ([_subscriber view] != nil) {
+    [self notifyStateChange:FLTConnectionStateSubscriberDisconnect errorDescription:nil];
+  }
+}
+
+
 - (void)subscriberDidConnectToStream:(nonnull OTSubscriberKit *)subscriber {
   if ([_subscriber view] == nil) {
     return;
@@ -163,6 +170,8 @@ OpentokVideoFactory *factory;
   } else {
     [[factory view] addSubscriberView:[_subscriber view]];
   }
+
+  [self notifyStateChange:FLTConnectionStateOnCall errorDescription:nil];
 }
 
 

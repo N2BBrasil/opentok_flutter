@@ -40,7 +40,8 @@ public class OpenTok {
         LOGGED_IN(1),
         WAIT(2),
         ON_CALL(3),
-        ERROR(4);
+        ERROR(4),
+        SUBSCRIBER_DISCONNECT(5);
 
         private int index;
 

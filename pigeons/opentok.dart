@@ -1,6 +1,13 @@
 import 'package:pigeon/pigeon.dart';
 
-enum ConnectionState { loggedOut, loggedIn, wait, onCall, error }
+enum ConnectionState {
+  loggedOut,
+  loggedIn,
+  wait,
+  onCall,
+  error,
+  subscriberDisconnect,
+}
 
 class ConnectionStateCallback {
   final ConnectionState state;
