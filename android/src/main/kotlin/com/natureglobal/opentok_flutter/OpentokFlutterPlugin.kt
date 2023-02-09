@@ -142,6 +142,7 @@ class OpentokFlutterPlugin : FlutterPlugin, OpenTok.OpenTokHostApi {
         override fun onStreamDropped(session: Session, stream: Stream) {
             if (subscriber != null) {
                 cleanUpSubscriber()
+                notifyFlutter(OpenTok.ConnectionState.SUBSCRIBER_DISCONNECT)
             }
         }
 
@@ -170,7 +171,7 @@ class OpentokFlutterPlugin : FlutterPlugin, OpenTok.OpenTokHostApi {
             override fun onConnected(subscriberKit: SubscriberKit) {}
 
             override fun onDisconnected(subscriberKit: SubscriberKit) {
-                notifyFlutter(OpenTok.ConnectionState.SUBSCRIBER_DISCONNECT)
+                notifyFlutter(OpenTok.ConnectionState.LOGGED_OUT)
             }
 
             override fun onError(subscriberKit: SubscriberKit, opentokError: OpentokError) {
