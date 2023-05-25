@@ -46,6 +46,8 @@ abstract class OpenTokHostApi {
   void onResume();
 
   void onStop();
+
+  String? getConnectionId();
 }
 
 @FlutterApi()

@@ -227,6 +227,23 @@ public class OpenTok {
                     channel.setMessageHandler(null);
                 }
             }
+            {
+                BasicMessageChannel<Object> channel =
+                        new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.OpenTokHostApi.getConnectionId", getCodec());
+                if (api != null) {
+                    channel.setMessageHandler((message, reply) -> {
+                        Map<String, Object> wrapped = new HashMap<>();
+                        try {
+                            wrapped.put("result", api.getConnectionId());
+                        } catch (Error | RuntimeException exception) {
+                            wrapped.put("error", wrapError(exception));
+                        }
+                        reply.reply(wrapped);
+                    });
+                } else {
+                    channel.setMessageHandler(null);
+                }
+            }
         }
 
         void initSession(@NonNull OpenTokConfig config);
@@ -244,6 +261,8 @@ public class OpenTok {
         void onResume();
 
         void onStop();
+
+        String getConnectionId();
     }
 
     /**

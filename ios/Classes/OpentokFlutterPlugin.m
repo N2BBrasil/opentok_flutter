@@ -82,6 +82,15 @@ OpentokVideoFactory *factory;
   return;
 }
 
+- (nullable NSString *)getConnectionId:(FlutterError * _Nullable __autoreleasing * _Nonnull)error {
+    if (_session.connection) {
+         return _session.connection.connectionId;
+     } else {
+         return nil;
+     }
+}
+
+
 
 // MARK: OpenTok session callbacks
 - (void)session:(nonnull OTSession *)session didFailWithError:(nonnull OTError *)error {
@@ -103,11 +112,12 @@ OpentokVideoFactory *factory;
 }
 
 - (void)session:(nonnull OTSession *)session streamDestroyed:(nonnull OTStream *)stream {
-  [self notifyStateChange:FLTConnectionStateLoggedOut errorDescription:nil];
-
-  if ([_subscriber.stream.streamId isEqualToString:stream.streamId]) {
-      [self cleanupSubscriber];
-  }
+    if ([_subscriber.stream.streamId isEqualToString:stream.streamId]) {
+        [self cleanupSubscriber];
+        [self notifyStateChange:FLTConnectionStateSubscriberDisconnect errorDescription:nil];
+     } else {
+        [self notifyStateChange:FLTConnectionStateLoggedOut errorDescription:nil];
+     }
 }
 
 - (void)session:(OTSession *)session connectionDestroyed:(OTConnection *)connection {
@@ -150,13 +160,6 @@ OpentokVideoFactory *factory;
 - (void)subscriber:(nonnull OTSubscriberKit *)subscriber didFailWithError:(nonnull OTError *)error {
   [self notifyStateChange:FLTConnectionStateError errorDescription:error.localizedDescription];
 }
-
-- (void)subscriber:(OTPublisherKit *)publisher streamDestroyed:(OTStream *)stream {
-  if ([_subscriber view] != nil) {
-    [self notifyStateChange:FLTConnectionStateSubscriberDisconnect errorDescription:nil];
-  }
-}
-
 
 - (void)subscriberDidConnectToStream:(nonnull OTSubscriberKit *)subscriber {
   if ([_subscriber view] == nil) {

@@ -52,6 +52,7 @@ NSObject<FlutterMessageCodec> *FLTOpenTokHostApiGetCodec(void);
 - (void)onPauseWithError:(FlutterError *_Nullable *_Nonnull)error;
 - (void)onResumeWithError:(FlutterError *_Nullable *_Nonnull)error;
 - (void)onStopWithError:(FlutterError *_Nullable *_Nonnull)error;
+- (nullable NSString *)getConnectionId:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void FLTOpenTokHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<FLTOpenTokHostApi> *_Nullable api);

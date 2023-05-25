@@ -88,6 +88,12 @@ class OpentokFlutterPlugin : FlutterPlugin, OpenTok.OpenTokHostApi {
     override fun onStop() {
         publisher?.onStop()
     }
+
+    override fun getConnectionId(): String {
+        return session!!.connection!!.connectionId
+    }
+
+
     // endregion
 
     // region Opentok callbacks

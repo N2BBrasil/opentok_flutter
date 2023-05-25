@@ -64,7 +64,10 @@ class OpenTokController extends ValueNotifier<OpenTokValue> {
   ///
   /// The new state value is also passed as a parameter.
   void onStateUpdate(open_tok.ConnectionStateCallback connection) async {
-    value = value.copyWith(state: connection.state, errorDescription: connection.errorDescription);
+    value = value.copyWith(
+      state: connection.state,
+      errorDescription: connection.errorDescription,
+    );
   }
 
   /// Initiates a OpenTok session with the given [open_tok.OpenTokConfig] values.
@@ -127,6 +130,10 @@ class OpenTokController extends ValueNotifier<OpenTokValue> {
   /// This method is only for Android. On iOS will do nothing.
   void disposeVideo() async {
     await _openTokFlutter?.onStop();
+  }
+
+  Future<String?> getConnectionId() {
+    return _openTokFlutter!.getConnectionId();
   }
 }
 
@@ -235,12 +242,14 @@ class _OpenTokViewState extends State<OpenTokView> {
                   ElevatedButton(
                     onPressed: widget.onEndButtonTap,
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all<CircleBorder>(const CircleBorder()),
+                      shape: MaterialStateProperty.all<CircleBorder>(
+                          const CircleBorder()),
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         widget.buttonPadding ?? const EdgeInsets.all(10.0),
                       ),
                       elevation: MaterialStateProperty.all<double>(8.0),
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.red),
                     ),
                     child: const Icon(Icons.call_end),
                   ),
@@ -248,7 +257,8 @@ class _OpenTokViewState extends State<OpenTokView> {
                   ElevatedButton(
                     onPressed: widget.onCameraButtonTap,
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all<CircleBorder>(const CircleBorder()),
+                      shape: MaterialStateProperty.all<CircleBorder>(
+                          const CircleBorder()),
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         widget.buttonPadding ?? const EdgeInsets.all(10.0),
                       ),
@@ -258,10 +268,11 @@ class _OpenTokViewState extends State<OpenTokView> {
                   ),
                 if (widget.onMicButtonTap != null)
                   ElevatedButton(
-                    onPressed: () =>
-                        widget.onMicButtonTap?.call(widget.controller.value.audioEnabled),
+                    onPressed: () => widget.onMicButtonTap
+                        ?.call(widget.controller.value.audioEnabled),
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all<CircleBorder>(const CircleBorder()),
+                      shape: MaterialStateProperty.all<CircleBorder>(
+                          const CircleBorder()),
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         widget.buttonPadding ?? const EdgeInsets.all(10.0),
                       ),
@@ -273,10 +284,11 @@ class _OpenTokViewState extends State<OpenTokView> {
                   ),
                 if (widget.onVideoButtonTap != null)
                   ElevatedButton(
-                    onPressed: () =>
-                        widget.onVideoButtonTap?.call(widget.controller.value.videoEnabled),
+                    onPressed: () => widget.onVideoButtonTap
+                        ?.call(widget.controller.value.videoEnabled),
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all<CircleBorder>(const CircleBorder()),
+                      shape: MaterialStateProperty.all<CircleBorder>(
+                          const CircleBorder()),
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         widget.buttonPadding ?? const EdgeInsets.all(10.0),
                       ),
@@ -290,7 +302,8 @@ class _OpenTokViewState extends State<OpenTokView> {
                   ElevatedButton(
                     onPressed: widget.onFullScreenButtonTap,
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all<CircleBorder>(const CircleBorder()),
+                      shape: MaterialStateProperty.all<CircleBorder>(
+                          const CircleBorder()),
                       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         widget.buttonPadding ?? const EdgeInsets.all(10.0),
                       ),
@@ -313,13 +326,15 @@ class AndroidOpenTokVideoView extends StatelessWidget {
   final String viewType;
 
   /// Constructs an [AndroidOpenTokVideoView] instance with the given [viewType].
-  const AndroidOpenTokVideoView({Key? key, required this.viewType}) : super(key: key);
+  const AndroidOpenTokVideoView({Key? key, required this.viewType})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return PlatformViewLink(
       viewType: viewType,
-      surfaceFactory: (BuildContext context, PlatformViewController controller) {
+      surfaceFactory:
+          (BuildContext context, PlatformViewController controller) {
         return AndroidViewSurface(
           controller: controller as AndroidViewController,
           gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{},
@@ -352,7 +367,8 @@ class IOSOpenTokVideoView extends StatelessWidget {
   final String viewType;
 
   /// Constructs an [IOSOpenTokVideoView] instance with the given [viewType].
-  const IOSOpenTokVideoView({Key? key, required this.viewType}) : super(key: key);
+  const IOSOpenTokVideoView({Key? key, required this.viewType})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

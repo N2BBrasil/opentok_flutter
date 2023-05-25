@@ -299,6 +299,24 @@ void FLTOpenTokHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject
       [channel setMessageHandler:nil];
     }
   }
+  {
+      FlutterBasicMessageChannel *channel =
+        [[FlutterBasicMessageChannel alloc]
+          initWithName:@"dev.flutter.pigeon.OpenTokHostApi.getConnectionId"
+          binaryMessenger:binaryMessenger
+          codec:FLTOpenTokHostApiGetCodec()];
+      if (api) {
+        NSCAssert([api respondsToSelector:@selector(getConnectionId:)], @"FLTOpenTokHostApi api (%@) doesn't respond to @selector(getConnectionId:)", api);
+        [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+          FlutterError *error;
+          NSString *connectionId = [api getConnectionId:&error];
+          callback(wrapResult(connectionId, error));
+        }];
+      }
+      else {
+        [channel setMessageHandler:nil];
+      }
+    }
 }
 @interface FLTOpenTokPlatformApiCodecReader : FlutterStandardReader
 @end
