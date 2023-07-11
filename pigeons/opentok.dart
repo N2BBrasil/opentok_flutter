@@ -9,6 +9,27 @@ enum ConnectionState {
   subscriberDisconnect,
 }
 
+enum AudioOutputDevice {
+  speaker,
+  receiver,
+  headphone,
+  bluetooth,
+}
+
+enum CameraState { on, off }
+
+class CameraStateCallback {
+  final CameraState state;
+
+  const CameraStateCallback(this.state);
+}
+
+class AudioOutputDeviceCallback {
+  final AudioOutputDevice device;
+
+  const AudioOutputDeviceCallback(this.device);
+}
+
 class ConnectionStateCallback {
   final ConnectionState state;
 
@@ -48,9 +69,17 @@ abstract class OpenTokHostApi {
   void onStop();
 
   String? getConnectionId();
+
+  List<String> listAvailableOutputDevices();
+
+  void setOutputDevice(AudioOutputDevice device);
 }
 
 @FlutterApi()
 abstract class OpenTokPlatformApi {
   void onStateUpdate(ConnectionStateCallback connectionState);
+
+  void onOutputDeviceUpdate(AudioOutputDeviceCallback outputDevice);
+
+  void onSubscriberCameraStateUpdate(CameraStateCallback cameraState);
 }

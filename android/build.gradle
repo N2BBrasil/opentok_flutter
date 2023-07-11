@@ -47,6 +47,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.opentok.android:opentok-android-sdk:2.24.0'
+    implementation 'com.opentok.android:opentok-android-sdk:2.25.2'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }

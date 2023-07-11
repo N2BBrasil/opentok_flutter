@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:opentok_flutter/opentok.dart';
 import 'package:opentok_flutter/opentok_view.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -50,9 +50,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     _config = OpenTokConfig(
-      apiKey: "",
-      sessionId: "",
-      token: "",
+      apiKey: "47107444",
+      sessionId:
+          "2_MX40NzEwNzQ0NH5-MTY4OTAxNzY4ODEzN356UzFkVkY4MFVYaFdURHF3NExXYmRTNXl-fn4",
+      token:
+          "T1==cGFydG5lcl9pZD00NzEwNzQ0NCZzaWc9OGRiM2VlYjE5Yzg1OTgzMDQyZWZjMTIzN2VmNDkxNmNjYzMzZGU1ODpzZXNzaW9uX2lkPTJfTVg0ME56RXdOelEwTkg1LU1UWTRPVEF4TnpZNE9ERXpOMzU2VXpGa1ZrWTRNRlZZYUZkVVJIRjNORXhYWW1SVE5YbC1mbjQmY3JlYXRlX3RpbWU9MTY4OTAxNzcwMiZub25jZT0wLjkyNjU5MDMxMDI2MzYzNDEmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTY4OTAzOTMwMSZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ==",
     );
 
     _controller = OpenTokController();
@@ -61,12 +63,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         Permission.camera,
         Permission.microphone,
       ].request();
-      final isGranted = statuses[Permission.camera] == PermissionStatus.granted &&
-          statuses[Permission.microphone] == PermissionStatus.granted;
+      final isGranted =
+          statuses[Permission.camera] == PermissionStatus.granted &&
+              statuses[Permission.microphone] == PermissionStatus.granted;
       if (isGranted) {
         _controller?.initSession(_config);
       } else {
-        debugPrint("Camera or Microphone permission or both denied by the user!");
+        debugPrint(
+            "Camera or Microphone permission or both denied by the user!");
       }
     });
   }
@@ -90,10 +94,17 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         child: OpenTokView(
           controller: _controller ?? OpenTokController(),
           padding: const EdgeInsets.only(bottom: 10),
-          onFullScreenButtonTap: () => setState(() => isFullScreen = !isFullScreen),
-          onEndButtonTap: () => _controller?.endSession(),
-          onCameraButtonTap: () => _controller?.toggleCamera(),
-          onMicButtonTap: (isEnabled) => _controller?.toggleAudio(!isEnabled),
+          onFullScreenButtonTap: () =>
+              setState(() => isFullScreen = !isFullScreen),
+          onEndButtonTap: () async {
+            _controller?.endSession();
+          },
+          onCameraButtonTap: () {
+            // _controller?.setAudioDevice(SoundOutputDevice.SPEAKER);
+          },
+          onMicButtonTap: (isEnabled) {
+            _controller?.toggleAudio(!isEnabled);
+          },
           onVideoButtonTap: (isEnabled) => _controller?.toggleVideo(!isEnabled),
         ),
       ),

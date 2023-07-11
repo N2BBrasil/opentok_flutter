@@ -1,5 +1,5 @@
 # Run this file to regenerate pigeon files
-flutter pub run pigeon \
+dart run pigeon \
   --input pigeons/opentok.dart \
   --dart_out lib/opentok.dart \
   --objc_header_out ios/Classes/OpenTok.h \

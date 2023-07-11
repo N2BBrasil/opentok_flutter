@@ -13,6 +13,12 @@ class OpenTokValue {
   /// Default to [open_tok.ConnectionState.loggedOut].
   final open_tok.ConnectionState state;
 
+  /// Default to [open_tok.CameraState.off].
+  final open_tok.CameraState subscriberCameraState;
+
+  /// Default to [open_tok.AudioOutputDevice.speaker].
+  final open_tok.AudioOutputDevice audioOutputDevice;
+
   /// Whether publisher audio (microphone) is enabled or not.
   final bool audioEnabled;
 
@@ -29,6 +35,8 @@ class OpenTokValue {
   /// [audioEnabled] & [videoEnabled] are default to true.
   const OpenTokValue({
     this.state = open_tok.ConnectionState.loggedOut,
+    this.subscriberCameraState = open_tok.CameraState.off,
+    this.audioOutputDevice = open_tok.AudioOutputDevice.speaker,
     this.audioEnabled = true,
     this.videoEnabled = true,
     this.errorDescription,
@@ -38,12 +46,17 @@ class OpenTokValue {
   /// except for any overrides passed in as arguments to [copyWith].
   OpenTokValue copyWith({
     open_tok.ConnectionState? state,
+    open_tok.CameraState? subscriberCameraState,
+    open_tok.AudioOutputDevice? audioOutputDevice,
     bool? audioEnabled,
     bool? videoEnabled,
     String? errorDescription,
   }) {
     return OpenTokValue(
       state: state ?? this.state,
+      subscriberCameraState:
+          subscriberCameraState ?? this.subscriberCameraState,
+      audioOutputDevice: audioOutputDevice ?? this.audioOutputDevice,
       audioEnabled: audioEnabled ?? this.audioEnabled,
       videoEnabled: videoEnabled ?? this.videoEnabled,
       errorDescription: errorDescription,
@@ -70,9 +83,22 @@ class OpenTokController extends ValueNotifier<OpenTokValue> {
     );
   }
 
+  void onCameraStateUpdate(open_tok.CameraStateCallback camera) async {
+    value = value.copyWith(subscriberCameraState: camera.state);
+  }
+
+  void onOutputDeviceUpdate(open_tok.AudioOutputDeviceCallback device) async {
+    value = value.copyWith(audioOutputDevice: device.device);
+  }
+
   /// Initiates a OpenTok session with the given [open_tok.OpenTokConfig] values.
   void initSession(open_tok.OpenTokConfig config) async {
-    _openTokFlutter = OpenTokFlutter(config, onUpdate: onStateUpdate);
+    _openTokFlutter = OpenTokFlutter(
+      config,
+      onUpdate: onStateUpdate,
+      onCameraUpdate: onCameraStateUpdate,
+      onDeviceUpdate: onOutputDeviceUpdate,
+    );
     await _openTokFlutter?.initSession();
   }
 
@@ -134,6 +160,14 @@ class OpenTokController extends ValueNotifier<OpenTokValue> {
 
   Future<String?> getConnectionId() {
     return _openTokFlutter!.getConnectionId();
+  }
+
+  Future<List<open_tok.AudioOutputDevice?>> listAvailableOutputDevices() async {
+    return _openTokFlutter!.listAvailableOutputDevices();
+  }
+
+  void setOutputDevice(open_tok.AudioOutputDevice audioDevice) {
+    _openTokFlutter!.setOutputDevice(audioDevice);
   }
 }
 

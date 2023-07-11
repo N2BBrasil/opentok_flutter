@@ -11,9 +11,18 @@ class OpenTokFlutter implements OpenTokPlatformApi {
   /// returns [ConnectionState] enum & an optional error description.
   final void Function(ConnectionStateCallback)? onUpdate;
 
+  final void Function(AudioOutputDeviceCallback)? onDeviceUpdate;
+
+  final void Function(CameraStateCallback)? onCameraUpdate;
+
   /// Create [OpenTokFlutter] class with necessary config values and register a callback for connection status update.
   /// [OpenTokConfig] contains API key, Session Id & Token.
-  OpenTokFlutter(OpenTokConfig config, {this.onUpdate}) : _config = config {
+  OpenTokFlutter(
+    OpenTokConfig config, {
+    this.onUpdate,
+    this.onDeviceUpdate,
+    this.onCameraUpdate,
+  }) : _config = config {
     OpenTokPlatformApi.setup(this);
   }
 
@@ -21,6 +30,16 @@ class OpenTokFlutter implements OpenTokPlatformApi {
   @override
   void onStateUpdate(ConnectionStateCallback connectionState) =>
       onUpdate?.call(connectionState);
+
+  @override
+  void onOutputDeviceUpdate(AudioOutputDeviceCallback outputDevice) {
+    onDeviceUpdate?.call(outputDevice);
+  }
+
+  @override
+  void onSubscriberCameraStateUpdate(CameraStateCallback cameraState) {
+    onCameraUpdate?.call(cameraState);
+  }
 
   /// Initiates a opentok session with the given [OpenTokConfig] value.
   Future<void> initSession() async {
@@ -109,6 +128,27 @@ class OpenTokFlutter implements OpenTokPlatformApi {
   Future<String?> getConnectionId() async {
     try {
       return await _openTokHostApi.getConnectionId();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<AudioOutputDevice>> listAvailableOutputDevices() async {
+    try {
+      final result = await _openTokHostApi.listAvailableOutputDevices();
+
+      return result
+          .where((e) => e != null)
+          .map((e) => AudioOutputDevice.values.byName(e!.toLowerCase()))
+          .toList();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> setOutputDevice(AudioOutputDevice device) async {
+    try {
+      return await _openTokHostApi.setOutputDevice(device);
     } catch (e) {
       rethrow;
     }
